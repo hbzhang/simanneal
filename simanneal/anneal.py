@@ -126,11 +126,11 @@ class Annealer(object):
                 (T, E, time_string(elapsed)))
             sys.stdout.flush()
         else:
-        remain = (self.steps - step) * (elapsed / step)
-        sys.stdout.write('\r%12.2f  %12.2f  %7.2f%%  %7.2f%%  %s  %s' % \
-        (T, E, 100.0 * acceptance, 100.0 * improvement,\
-        time_string(elapsed), time_string(remain))),
-        sys.stdout.flush()
+            remain = (self.steps - step) * (elapsed / step)
+            sys.stdout.write('\r%12.2f  %12.2f  %7.2f%%  %7.2f%%  %s  %s' % \
+            (T, E, 100.0 * acceptance, 100.0 * improvement,\
+            time_string(elapsed), time_string(remain))),
+            sys.stdout.flush()
 
     def anneal(self):
         """Minimizes the energy of a system by simulated annealing.

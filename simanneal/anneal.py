@@ -120,12 +120,12 @@ class Annealer(object):
         thermally accessible."""
 
         elapsed = time.time() - self.start
-        #if step == 0:
-            #print(' Temperature        Energy    Accept   Improve     Elapsed   Remaining')
-            #sys.stdout.write('\r%12.2f  %12.2f                      %s            ' % \
-            #    (T, E, time_string(elapsed)))
-            #sys.stdout.flush()
-        #else:
+        if step == 0:
+            print(' Temperature        Energy    Accept   Improve     Elapsed   Remaining')
+            sys.stdout.write('\r%12.2f  %12.2f                      %s            ' % \
+                (T, E, time_string(elapsed)))
+            sys.stdout.flush()
+        else:
         remain = (self.steps - step) * (elapsed / step)
         sys.stdout.write('\r%12.2f  %12.2f  %7.2f%%  %7.2f%%  %s  %s' % \
         (T, E, 100.0 * acceptance, 100.0 * improvement,\
@@ -160,7 +160,7 @@ class Annealer(object):
         trials, accepts, improves = 0, 0, 0
         if self.updates > 0:
             updateWavelength = self.steps / self.updates
-            self.update(step, T, E, None, None)
+            #self.update(step, T, E, None, None)
 
         # Attempt moves to new states
         while step < self.steps and not self.user_exit:
@@ -184,10 +184,10 @@ class Annealer(object):
                 if E < bestEnergy:
                     bestState = self.copy_state(self.state)
                     bestEnergy = E
-            if self.updates > 1:
-                if step // updateWavelength > (step - 1) // updateWavelength:
-                    self.update(
-                        step, T, E, accepts / trials, improves / trials)
+            #if self.updates > 1:
+            #    if step // updateWavelength > (step - 1) // updateWavelength:
+            #        self.update(
+            #            step, T, E, accepts / trials, improves / trials)
                     trials, accepts, improves = 0, 0, 0
 
         # line break after progress output
@@ -239,7 +239,7 @@ class Annealer(object):
         # Find an initial guess for temperature
         T = 0.0
         E = self.energy()
-        self.update(step, T, E, None, None)
+        #self.update(step, T, E, None, None)
         while T == 0.0:
             step += 1
             self.move()
@@ -253,12 +253,12 @@ class Annealer(object):
             T = round_figures(T / 1.5, 2)
             E, acceptance, improvement = run(T, steps)
             step += steps
-            self.update(step, T, E, acceptance, improvement)
+            #self.update(step, T, E, acceptance, improvement)
         while acceptance < 0.98:
             T = round_figures(T * 1.5, 2)
             E, acceptance, improvement = run(T, steps)
             step += steps
-            self.update(step, T, E, acceptance, improvement)
+            #self.update(step, T, E, acceptance, improvement)
         Tmax = T
 
         # Search for Tmin - a temperature that gives 0% improvement
@@ -266,7 +266,7 @@ class Annealer(object):
             T = round_figures(T / 1.5, 2)
             E, acceptance, improvement = run(T, steps)
             step += steps
-            self.update(step, T, E, acceptance, improvement)
+            #self.update(step, T, E, acceptance, improvement)
         Tmin = T
 
         # Calculate anneal duration
